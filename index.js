@@ -1,11 +1,25 @@
-const read = `8 1 7 2 6 3 5 4`;
+const read = `216`;
 
-const input = read.toString().trim().split(' ').map(Number);
+const input = read.toString().trim();
 
-let count = 0;
-for (let i = 0; i < 7; i++) {
-  if (input[i] < input[i + 1]) count++;
+const N = +input;
+let start = N - String(N).length * 9;
+let M = start;
+let answer;
+
+while (true) {
+  M++;
+  let sum = M;
+  for (let i = 0; i < String(M).length; i++) {
+    sum = sum + Number(String(M).charAt(i));
+  }
+  if (sum === N) {
+    answer = M;
+    break;
+  }
+  if (M >= N) {
+    answer = 0;
+    break;
+  }
 }
-
-const result = { 0: 'descending', 7: 'ascending' }[count];
-console.log(result || 'mixed');
+console.log(answer);
