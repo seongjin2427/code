@@ -1,7 +1,6 @@
 const read = `11`;
 
 let input = +read.toString().trim();
-console.log(input);
 
 let count = 0;
 
