@@ -1,12 +1,8 @@
-const read = `baekjoon`;
+const read = `3
+26 40 83
+49 60 57
+13 89 99`;
 
-const input = read.toString().trim();
+const [n, ...houses] = read.toString().trim().split('\n');
 
-const arr = new Array(26).fill(0);
-
-input.split('').forEach((s) => {
-  const index = s.charCodeAt() - 97;
-  arr[index]++;
-});
-
-console.log(arr.join(' '));
+console.log(n, houses)
