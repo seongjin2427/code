@@ -1,24 +1,21 @@
-const read = `2
-<<BP<A>>Cd-
-ThIsIsS3Cr3t`;
+const read = `2 3 1`;
 
-const [n, ...keyLog] = read.toString().trim().split('\n');
+const [N, r, c] = read.toString().trim().split(' ').map(Number);
 
-function solution(str) {
-  const left = [];
-  const right = [];
-
-  for (const s of str) {
-    if (s === '-') left.pop();
-    else if (s === '<') {
-      if (left.length) right.push(left.pop());
-    } else if (s === '>') {
-      if (right.length) left.push(right.pop());
-    } else {
-      left.push(s);
-    }
+let res = 0;
+const recursion = (x, y, length) => {
+  if (x === r && y === c) {
+    console.log(res);
+    return;
   }
-  console.log([...left, ...right.reverse()].join(''));
-}
 
-keyLog.forEach(solution);
+  if (r >= x && r < x + length && c >= y && c < y + length) {
+    length = parseInt(length / 2);
+    recursion(x, y, length);
+    recursion(x, y + length, length);
+    recursion(x + length, y, length);
+    recursion(x + length, y + length, length);
+  } else res += length * length;
+};
+
+recursion(0, 0, 2 ** N);
