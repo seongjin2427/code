@@ -1,19 +1,39 @@
-const read = `5
--1 -2 -3 -4 -5`;
+const read = `1 1`;
 
-const [n, num] = read.toString().trim().split("\n");
+const [n, k] = read.toString().trim().split(" ").map(Number);
 
-const numbers = num.split(" ").map(Number);
+// 1.
+const arr = Array.from({ length: n + 1 }, (_, i) => i);
 
-const dp = [];
-let max = -Infinity;
+arr[0] = Infinity;
+arr[1] = Infinity;
 
-for (let i = 0; i < n; i++) {
-  dp[i] = numbers[i];
-  let next = dp[i - 1] + numbers[i];
+const filtered = [];
 
-  if (dp[i] < next) dp[i] = next;
-  if (max < dp[i]) max = dp[i];
+function solution(arr) {
+  for (let i = 2; i < arr.length; i++) {
+    if (filtered.length - 1 === k) break;
+
+    // 2.
+    const min = Math.min(...arr);
+
+    // 3. 4.
+    if (min !== Infinity) {
+      filtered.push(min);
+      arr[min] = Infinity;
+    }
+
+    for (let j = 2 * i; j < arr.length; j += i) {
+      if (filtered.length - 1 === k) break;
+
+      if (arr[j] !== Infinity) {
+        filtered.push(arr[j]);
+        arr[j] = Infinity;
+      }
+    }
+  }
 }
 
-console.log(max);
+solution(arr);
+
+console.log(n === 1 ? 1 : filtered[k - 1]);
