@@ -1,39 +1,46 @@
-const read = `1 1`;
+const read = `7
+1 6
+6 3
+3 5
+4 1
+2 4
+4 7`;
 
-const [n, k] = read.toString().trim().split(" ").map(Number);
+const input = read.toString().trim().split("\n");
 
-// 1.
-const arr = Array.from({ length: n + 1 }, (_, i) => i);
+const N = input.shift();
+const nodes = input.map((n) => n.split(" ").map((v) => +v));
 
-arr[0] = Infinity;
-arr[1] = Infinity;
+class Tree {
+  constructor() {
+    this.root = { 1: [] };
+  }
+  add(n1, n2) {
+    const keys = Object.keys(this.root).map((v) => +v);
 
-const filtered = [];
+    const key = keys.includes(n1) ? n1 : n2;
+    const val = keys.includes(n1) ? n2 : n1;
 
-function solution(arr) {
-  for (let i = 2; i < arr.length; i++) {
-    if (filtered.length - 1 === k) break;
-
-    // 2.
-    const min = Math.min(...arr);
-
-    // 3. 4.
-    if (min !== Infinity) {
-      filtered.push(min);
-      arr[min] = Infinity;
-    }
-
-    for (let j = 2 * i; j < arr.length; j += i) {
-      if (filtered.length - 1 === k) break;
-
-      if (arr[j] !== Infinity) {
-        filtered.push(arr[j]);
-        arr[j] = Infinity;
+    if (this.root[key]) this.root[key].push(val);
+    else this.root[key] = [val];
+    if (!this.root[val]) this.root[val] = [];
+  }
+  find(n) {
+    for (const node in this.root) {
+      if (this.root[node].includes(n)) {
+        console.log(node);
       }
     }
   }
 }
 
-solution(arr);
+const t = new Tree();
 
-console.log(n === 1 ? 1 : filtered[k - 1]);
+for (let i = 0; i < nodes.length; i++) {
+  const [start, end] = nodes[i];
+  t.add(start, end);
+}
+
+for (let i = 2; i <= N; i++) {
+  t.find(i);
+}
