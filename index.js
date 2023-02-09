@@ -1,46 +1,41 @@
-const read = `7
-1 6
-6 3
-3 5
-4 1
-2 4
-4 7`;
+const read = `3
+1 6 4 3 5 2 7`;
 
-const input = read.toString().trim().split("\n");
+let input = read.toString().trim().split("\n");
 
-const N = input.shift();
-const nodes = input.map((n) => n.split(" ").map((v) => +v));
+const K = +input.shift();
+const paper = input[0].split(" ").map(Number);
 
-class Tree {
-  constructor() {
-    this.root = { 1: [] };
+let result = "";
+let mid = getMid(paper);
+
+result += `${mid}\n`;
+
+function search(arr) {
+  let next = [];
+
+  for (let a of arr) {
+    const mid = getMid(a);
+    result += `${a[mid]} `;
+    next.push(...makeArr(a, mid));
   }
-  add(n1, n2) {
-    const keys = Object.keys(this.root).map((v) => +v);
 
-    const key = keys.includes(n1) ? n1 : n2;
-    const val = keys.includes(n1) ? n2 : n1;
+  result += "\n";
 
-    if (this.root[key]) this.root[key].push(val);
-    else this.root[key] = [val];
-    if (!this.root[val]) this.root[val] = [];
-  }
-  find(n) {
-    for (const node in this.root) {
-      if (this.root[node].includes(n)) {
-        console.log(node);
-      }
-    }
-  }
+  if (next[0].length === 1) return next;
+  return search(next);
 }
 
-const t = new Tree();
-
-for (let i = 0; i < nodes.length; i++) {
-  const [start, end] = nodes[i];
-  t.add(start, end);
+function makeArr(arr, mid) {
+  let l = arr.slice(0, mid);
+  let r = arr.slice(mid + 1);
+  return [l, r];
 }
 
-for (let i = 2; i <= N; i++) {
-  t.find(i);
+function getMid(arr) {
+  return Math.ceil(arr.length - 1) / 2;
 }
+
+const re = search(makeArr(paper, mid));
+re.forEach((r) => (result += `${r} `));
+console.log(result);
