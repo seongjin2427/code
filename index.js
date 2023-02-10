@@ -1,41 +1,54 @@
-const read = `3
-1 6 4 3 5 2 7`;
+const read = `7
+A B C
+B D .
+C E F
+E . .
+F . G
+D . .
+G . .`;
 
 let input = read.toString().trim().split("\n");
 
-const K = +input.shift();
-const paper = input[0].split(" ").map(Number);
+console.log(input);
+const N = input.shift();
+const nodes = input.map((n) => n.split(" "));
 
-let result = "";
-let mid = getMid(paper);
+const tree = {};
 
-result += `${mid}\n`;
+nodes.forEach((n) => {
+  const [origin, left, right] = n;
+  tree[origin] = [];
+  if (left !== ".") tree[origin].push(left);
+  if (right !== ".") tree[origin].push(right);
+});
 
-function search(arr) {
-  let next = [];
+preorder(tree);
+inorder(tree);
 
-  for (let a of arr) {
-    const mid = getMid(a);
-    result += `${a[mid]} `;
-    next.push(...makeArr(a, mid));
+function preorder(obj) {
+  let result = "A";
+  const queue = [...obj.A];
+
+  while (queue.length) {
+    const node = queue.shift();
+
+    result += node;
+    queue.unshift(...obj[node]);
   }
 
-  result += "\n";
-
-  if (next[0].length === 1) return next;
-  return search(next);
+  console.log(result);
 }
 
-function makeArr(arr, mid) {
-  let l = arr.slice(0, mid);
-  let r = arr.slice(mid + 1);
-  return [l, r];
-}
+function inorder(obj) {
+  let result = "A";
+  const queue = [...obj.A];
 
-function getMid(arr) {
-  return Math.ceil(arr.length - 1) / 2;
-}
+  while (queue.length) {
+    const node = queue.pop();
 
-const re = search(makeArr(paper, mid));
-re.forEach((r) => (result += `${r} `));
-console.log(result);
+    result += node;
+    queue.unshift(...obj[node]);
+  }
+
+  console.log(result);
+}
