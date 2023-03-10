@@ -1,48 +1,50 @@
 const read = `5
-6 3 2 10 -10
-8
-10 9 -5 2 3 4 5 -10
+1 1 1 6 0
+2 7 8 3 1
 `;
 
 const input = read.toString().trim().split("\n");
 
-const NNumber = new Set([...input[1].split(" ").map(Number)]);
-const MNumber = input[3].split(" ").map(Number);
-const answer = [];
+console.log(input);
 
-for (const num of MNumber) {
-  NNumber.has(num) ? answer.push(1) : answer.push(0);
+const [N, A, B] = input;
+
+const AA = A.split(" ").map(Number);
+const BB = B.split(" ").map(Number);
+
+let sum = 0;
+
+for (let i = 0; i < +N; i++) {
+  const aMin = Math.min(...AA);
+  const bMax = Math.max(...BB);
+  sum += aMin * bMax;
+
+  AA.splice(AA.indexOf(aMin), 1);
+  BB.splice(BB.indexOf(bMax), 1);
 }
 
-console.log(answer.join(" "));
+console.log(sum);
 
-// for (const num of MNumber) {
-//   const result = BinarySearch(NNumber, num);
+// 1.
+// const AA = A.split(" ")
+//   .map(Number)
+//   .sort((a, b) => a - b);
+// const BB = B.split(" ")
+//   .map(Number)
+//   .sort((a, b) => b - a);
+// const BBB = B.split(" ").map(Number);
 
-//   if (result) answer += "1 ";
-//   else answer += "0 ";
-// }
+// let sum = 0;
 
-// function BinarySearch(arr, target) {
-//   let left = 0;
-//   let right = arr.length - 1;
-//   let mid = Math.floor(arr.length / 2);
-//   let result = false;
+// console.log(AA, BB, BBB);
 
-//   while (left <= right) {
-//     if (target === arr[mid]) {
-//       result = true;
-//       break;
-//     } else if (target > arr[mid]) {
-//       left = mid + 1;
-//       mid = Math.floor((right + left) / 2);
-//     } else {
-//       right = mid - 1;
-//       mid = Math.floor(right / 2);
-//     }
-//   }
+// BBB.forEach((b) => {
+//   const index = BB.indexOf(b);
+//   const result = AA[index] * BB[index];
+//   console.log(index, result, BB);
+//   AA.splice(index, 1);
+//   BB.splice(index, 1);
+//   sum += result;
+// });
 
-//   return result;
-// }
-
-// console.log(answer);
+// console.log(sum);
