@@ -1,29 +1,27 @@
 function solution(maps) {
   let sum = 0;
   const result = [];
-  const mapArr = maps.map((map) => map.split(""));
-  const axis = [
-    [0, 1],
-    [1, 0],
-    [0, -1],
-    [-1, 0],
-  ];
+  const visited = Array.from({ length: maps.length }, () =>
+    new Array(maps[0].length).fill(false)
+  );
 
   function dfs(x, y) {
-    if (0 <= y && y < mapArr.length && 0 <= x && x < mapArr[0].length) {
-      const target = mapArr[y][x];
-      if (target !== "X") {
-        mapArr[y][x] = "X";
+    if (0 <= y && y < maps.length && 0 <= x && x < maps[0].length) {
+      const target = maps[y][x];
+      if (target !== "X" && !visited[y][x]) {
+        visited[y][x] = true;
         sum += +target;
-
-        for (const [dx, dy] of axis) dfs(x + dx, y + dy);
+        dfs(x + 1, y, sum);
+        dfs(x, y + 1, sum);
+        dfs(x - 1, y, sum);
+        dfs(x, y - 1, sum);
       }
     }
   }
 
-  for (let i = 0; i < mapArr.length; i++) {
-    for (let j = 0; j < mapArr[0].length; j++) {
-      if (mapArr[i][j] !== "X") {
+  for (let i = 0; i < maps.length; i++) {
+    for (let j = 0; j < maps[0].length; j++) {
+      if (maps[i][j] !== "X" && !visited[i][j]) {
         sum = 0;
         dfs(j, i);
         result.push(sum);
@@ -31,7 +29,8 @@ function solution(maps) {
     }
   }
 
-  return result.length ? result.sort((prev, cur) => prev - cur) : [-1];
+  if (!result.length) return [-1];
+  return result.sort((prev, cur) => prev - cur);
 }
 
 const m = ["X591X", "X1X5X", "X231X", "1XXX1"];
